@@ -32,8 +32,8 @@ defmodule DailyployWeb.SessionController do
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case UserModel.token_sign_in(email, password) do
-      {:ok, token, _claims} ->
-        conn |> render("access_token.json", access_token: token)
+      {:ok, token, workspace_id, _claims} ->
+        conn |> render("access_token.json", access_token: token, workspace_id: workspace_id)
 
       _ ->
         {:error, :unauthorized}

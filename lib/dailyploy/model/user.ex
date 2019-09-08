@@ -36,6 +36,7 @@ defmodule Dailyploy.Model.User do
     case email_password_auth(email, password) do
       {:ok, user} ->
         Guardian.encode_and_sign(user)
+        |> Tuple.insert_at(2, get_current_workspace(user).id)
 
       _ ->
         {:error, :unauthorized}

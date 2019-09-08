@@ -11,8 +11,8 @@ defmodule DailyployWeb.SessionView do
     %{id: user.id, name: user.name, email: user.email}
   end
 
-  def render("access_token.json", %{access_token: access_token}) do
-    %{access_token: access_token}
+  def render("access_token.json", %{access_token: access_token, workspace_id: workspace_id}) do
+    %{access_token: access_token, workspace_id: workspace_id}
   end
 
   def render("signup_error.json", %{user: user}) do
