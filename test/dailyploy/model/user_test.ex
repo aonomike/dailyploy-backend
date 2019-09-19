@@ -10,7 +10,6 @@ defmodule Dailyploy.Test.Model.UserTest do
   alias Dailyploy.Schema.User
   alias Dailyploy.Schema.Workspace
 
-
   @workspace_params %{name: "Awesome Workspace", type: 0}
   @user_params %{
     name: "Awesome User",
