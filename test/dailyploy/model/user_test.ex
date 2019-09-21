@@ -18,6 +18,15 @@ defmodule Dailyploy.Test.Model.UserTest do
     password_confirmation: "password",
     workspaces: [@workspace_params]
   }
+
+  @user_params_2 %{
+    name: "Awesome User",
+    email: "dailyploy@email.com",
+    password: "password",
+    password_confirmation: "password",
+    workspaces: [@workspace_params]
+  }
+
   @update_params %{
     name: "Dailyploy",
     email: "dailyploy@email.com",
@@ -61,6 +70,23 @@ defmodule Dailyploy.Test.Model.UserTest do
   test "delete_user/1" do
     {:ok, user = %User{}} = UserModel.create_user(@user_params)
     UserModel.delete_user(user)
-    assert length(UserModel.list_users()) == 1
+    assert length(UserModel.list_users()) == 0
+  end
+
+  @doc """
+  list_users/1 takes workspace_id as paramter and filters users belonging to that workspace
+  """
+  test "list_users/1" do
+    # Create 2 users
+    # assign 2 users to one workspace
+    # assign one user to the other workspace
+    # call list_users/1 passing one space id and assert the number returned say 2
+    # call list_users/1 passing the other workspace id and assert the number of records returned
+    {:ok, user = %User{workspaces: workspaces}} = UserModel.create_user(@user_params)
+    {:ok, user_2 = %User{workspaces: workspaces2}} = UserModel.create_user(@user_params_2)
+    workspace_id = List.first(workspaces).id
+    workspace2_id = List.first(workspaces2).id
+    assert length(UserModel.list_users(workspace_id)) == 1
+    assert length(UserModel.list_users(workspace2_id)) == 1
   end
 end
