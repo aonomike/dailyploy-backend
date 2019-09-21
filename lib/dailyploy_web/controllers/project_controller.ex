@@ -123,6 +123,12 @@ defmodule DailyployWeb.ProjectController do
     Map.put(project_params, "users", [Guardian.Plug.current_resource(conn)] ++ user_workspaces)
   end
 
+  @spec add_workspace_and_user_in_project_params_for_update(
+          map,
+          any,
+          atom | %{users: [any]},
+          atom | %{assigns: atom | %{workspace: any}}
+        ) :: map
   def add_workspace_and_user_in_project_params_for_update(project_params, user_workspaces, project, conn) do
     project_params = Map.put(project_params, "workspace", conn.assigns.workspace)
     users = Enum.uniq(project.users ++ user_workspaces)
