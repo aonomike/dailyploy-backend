@@ -27,14 +27,16 @@ defmodule Dailyploy.Model.UserWorkspace do
     Repo.preload(user_workspace, preloads)
   end
 
-  def get_user_workspace!(id, preloads), do: Repo.get!(UserWorkspace, id) |> Repo.preload(preloads)
+  def get_user_workspace!(id, preloads),
+    do: Repo.get!(UserWorkspace, id) |> Repo.preload(preloads)
 
   def user_workspaces_from_emails(workspace_id, emails) do
     query =
       from user_workspace in UserWorkspace,
-      join: user in User,
-      on: user_workspace.user_id == user.id,
-      where: user_workspace.workspace_id == ^workspace_id and user.email in ^emails
+        join: user in User,
+        on: user_workspace.user_id == user.id,
+        where: user_workspace.workspace_id == ^workspace_id and user.email in ^emails
+
     user_workspaces = Repo.all(query)
     user_workspaces = Repo.preload(user_workspaces, [:user])
     Enum.map(user_workspaces, fn user_workspace -> user_workspace.user end)

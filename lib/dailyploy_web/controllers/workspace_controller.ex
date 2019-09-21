@@ -32,5 +32,4 @@ defmodule DailyployWeb.WorkspaceController do
     tasks = TaskModel.list_workspace_tasks(workspace_id) |> Repo.preload([:user])
     render(conn, "index.json", tasks: tasks)
   end
-
 end
