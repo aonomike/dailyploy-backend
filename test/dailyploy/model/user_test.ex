@@ -29,7 +29,7 @@ defmodule Dailyploy.Test.Model.UserTest do
 
   @update_params %{
     name: "Dailyploy",
-    email: "dailyploy@email.com",
+    email: "dailyploy@email.com"
   }
   @doc """
   list_users/0 returns a list of all  users in the database

@@ -26,6 +26,7 @@ defmodule DailyployWeb.TaskController do
     case TaskModel.create_task(task_params) do
       {:ok, %Task{} = task} ->
         render(conn, "show.json", task: task |> Repo.preload([:user]))
+
       {:error, task} ->
         conn
         |> put_status(422)

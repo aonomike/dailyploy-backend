@@ -8,7 +8,7 @@ defmodule Dailyploy.Repo.Migrations.AddTaskTable do
       add :end_datetime, :utc_datetime
       add :comments, :text
 
-      add :project_id, references(:projects, [on_delete: :delete_all])
+      add :project_id, references(:projects, on_delete: :delete_all)
 
       timestamps()
     end

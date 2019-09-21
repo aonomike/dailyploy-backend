@@ -18,7 +18,7 @@ defmodule Dailyploy.Model.User do
         where: user.workspace_id == ^workspace_id
       )
 
-    Repo.all query
+    Repo.all(query)
   end
 
   def get_user!(id), do: Repo.get!(User, id)
@@ -76,12 +76,15 @@ defmodule Dailyploy.Model.User do
   end
 
   def get_current_workspace(user) do
-    query = from user_workspace in UserWorkspace,
-      join: workspace in Workspace,
-      on: user_workspace.workspace_id == workspace.id,
-      where: user_workspace.user_id == ^user.id and workspace.type == "individual"
+    query =
+      from user_workspace in UserWorkspace,
+        join: workspace in Workspace,
+        on: user_workspace.workspace_id == workspace.id,
+        where: user_workspace.user_id == ^user.id and workspace.type == "individual"
+
     user_workspaces = Repo.all(query) |> Repo.preload(:workspace)
-    user_workspace = List.first user_workspaces
+    user_workspace = List.first(user_workspaces)
+
     case user_workspace do
       nil -> nil
       _ -> user_workspace.workspace

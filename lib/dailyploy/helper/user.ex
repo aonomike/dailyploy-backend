@@ -68,7 +68,11 @@ defmodule Dailyploy.Helper.User do
   end
 
   defp associate_role_to_user_workspace(user_id, workspace_id) do
-    user_workspace = UserWorkspaceModel.get_user_workspace!(%{user_id: user_id, workspace_id: workspace_id}, [:role])
+    user_workspace =
+      UserWorkspaceModel.get_user_workspace!(%{user_id: user_id, workspace_id: workspace_id}, [
+        :role
+      ])
+
     role = RoleModel.get_role_by_name!(RoleModel.all_roles()[:admin])
     user_workspace_changeset = UserWorkspace.changeset(user_workspace, %{})
     UserWorkspaceModel.update_user_workspace_role(user_workspace_changeset, role)
