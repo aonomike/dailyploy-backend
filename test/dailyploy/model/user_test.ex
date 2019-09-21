@@ -65,7 +65,7 @@ defmodule Dailyploy.Test.Model.UserTest do
     UserModel.delete_user(user)
     assert length(UserModel.list_users()) == 0
   end
-  @doc """
+   @doc """
   list_users/1 takes workspace_id as paramter and filters users belonging to that workspace
   """
   test "list_users/1" do
