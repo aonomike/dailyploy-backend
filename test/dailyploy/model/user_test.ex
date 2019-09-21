@@ -33,6 +33,7 @@ defmodule Dailyploy.Test.Model.UserTest do
   }
   @doc """
   list_users/0 returns a list of all  users in the database
+
   ##Examples
   iex> Dailyploy.Model.User.list_users()
   [%Dailyploy.Model.User{}]
@@ -77,11 +78,6 @@ defmodule Dailyploy.Test.Model.UserTest do
   list_users/1 takes workspace_id as paramter and filters users belonging to that workspace
   """
   test "list_users/1" do
-    # Create 2 users
-    # assign 2 users to one workspace
-    # assign one user to the other workspace
-    # call list_users/1 passing one space id and assert the number returned say 2
-    # call list_users/1 passing the other workspace id and assert the number of records returned
     {:ok, user = %User{workspaces: workspaces}} = UserModel.create_user(@user_params)
     {:ok, user_2 = %User{workspaces: workspaces2}} = UserModel.create_user(@user_params_2)
     workspace_id = List.first(workspaces).id
