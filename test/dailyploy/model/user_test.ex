@@ -33,7 +33,6 @@ defmodule Dailyploy.Test.Model.UserTest do
   }
   @doc """
   list_users/0 returns a list of all  users in the database
-
   ##Examples
   iex> Dailyploy.Model.User.list_users()
   [%Dailyploy.Model.User{}]
@@ -84,5 +83,15 @@ defmodule Dailyploy.Test.Model.UserTest do
     workspace2_id = List.first(workspaces2).id
     assert length(UserModel.list_users(workspace_id)) == 1
     assert length(UserModel.list_users(workspace2_id)) == 1
+  end
+
+  @doc """
+  get_current_workspace/1 takes user
+  """
+  test "get_current_workspace/1 returns a workspace when user has a workspace" do
+    {:ok, user = %User{}} = UserModel.create_user(@user_params)
+    workspaces = user.workspaces
+    current_workspace = UserModel.get_current_workspace(user)
+    assert current_workspace == List.first(workspaces)
   end
 end
