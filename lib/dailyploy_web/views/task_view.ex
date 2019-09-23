@@ -31,6 +31,7 @@ defmodule DailyployWeb.TaskView do
       user: render(DailyployWeb.UserView, "user.json", user: task.user)
     }
   end
+
   def render("changeset_error.json", %{errors: errors}) do
     %{errors: ErrorHelpers.changeset_error_to_map(errors)}
   end

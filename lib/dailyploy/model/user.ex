@@ -36,7 +36,7 @@ defmodule Dailyploy.Model.User do
 
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.update_changeset(attrs)
     |> Repo.update()
   end
 
@@ -59,7 +59,7 @@ defmodule Dailyploy.Model.User do
          do: verify_password(password, user)
   end
 
-  defp get_by_email(email) when is_binary(email) do
+  def get_by_email(email) when is_binary(email) do
     case Repo.get_by(User, email: email) do
       nil ->
         dummy_checkpw()
@@ -96,6 +96,7 @@ defmodule Dailyploy.Model.User do
 
   def get_admin_user_query do
     admin_role = Repo.get_by(Role, name: "admin")
+
     from user in User,
       join: userWorkspace in UserWorkspace,
       where: userWorkspace.role_id == ^admin_role.id

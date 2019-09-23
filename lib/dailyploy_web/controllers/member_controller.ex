@@ -10,5 +10,4 @@ defmodule DailyployWeb.MemberController do
     members = UserModel.list_users(workspace_id)
     render(conn, "index.json", members: members)
   end
-
 end

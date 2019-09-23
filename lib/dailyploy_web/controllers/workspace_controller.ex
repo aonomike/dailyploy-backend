@@ -17,7 +17,9 @@ defmodule DailyployWeb.WorkspaceController do
 
     workspace_admin_query = UserModel.get_admin_user_query()
 
-    workspaces = WorkspaceModel.all_user_workspaces(user) |> Repo.preload([:company, users: workspace_admin_query])
+    workspaces =
+      WorkspaceModel.all_user_workspaces(user)
+      |> Repo.preload([:company, users: workspace_admin_query])
 
     render(conn, "index.json", workspaces: workspaces)
   end

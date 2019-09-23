@@ -62,7 +62,7 @@ defmodule Dailyploy.Test.Model.UserTest do
   """
   test "get_user/1 for missing id" do
     assert_raise Ecto.NoResultsError, fn ->
-      user_received  = UserModel.get_user!(9999999)
+      user_received = UserModel.get_user!(9_999_999)
     end
   end
 
@@ -117,4 +117,4 @@ defmodule Dailyploy.Test.Model.UserTest do
     current_workspace = UserModel.get_current_workspace(user)
     assert current_workspace == List.first(workspaces)
   end
- end
+end

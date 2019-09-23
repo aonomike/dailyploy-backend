@@ -7,6 +7,8 @@ defmodule DailyployWeb.SessionController do
   action_fallback DailyployWeb.FallbackController
 
   def sign_up(conn, %{"user" => user_params}) do
+    user = UserHelper.create_user_with_company(user_params)
+
     case UserHelper.create_user_with_company(user_params) do
       {:ok, %User{} = user} ->
         conn
@@ -34,6 +36,7 @@ defmodule DailyployWeb.SessionController do
     case UserModel.token_sign_in(email, password) do
       {:ok, token, _claims} ->
         conn |> render("access_token.json", access_token: token)
+
       _ ->
         {:error, :unauthorized}
     end
