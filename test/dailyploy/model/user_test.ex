@@ -50,12 +50,13 @@ defmodule Dailyploy.Test.Model.UserTest do
   iex> UserModel.get_user!(2)
   %User{}
   """
-  test "get_user/1 for existing" do
-    {:ok, user} = UserModel.create_user(@user_params)
-    user_received  = UserModel.get_user!(user.id)
-    assert user_received = %User{}
-    assert user.id == user_received.id
-  end
+  # test "get_user/1 for existing" do
+  #   {:ok, user} = UserModel.create_user(@user_params)
+  #   user_received  = UserModel.get_user!(user.id)
+  #   assert user_received = %User{}
+  #   assert user.id == user_received.id
+  # end
+
   @doc """
   get_user/1 fails for a users that's not in the database
   """
@@ -79,7 +80,6 @@ defmodule Dailyploy.Test.Model.UserTest do
   @doc """
   update_user/2 returns a Struct for the updated user
   """
-
   test "update_user/2" do
     {:ok, user = %User{}} = UserModel.create_user(@user_params)
     assert {:ok, updated_user = %User{}} = UserModel.update_user(user, @update_params)
@@ -117,4 +117,4 @@ defmodule Dailyploy.Test.Model.UserTest do
     current_workspace = UserModel.get_current_workspace(user)
     assert current_workspace == List.first(workspaces)
   end
-end
+ end
