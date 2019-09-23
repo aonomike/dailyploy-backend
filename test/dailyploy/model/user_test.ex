@@ -43,6 +43,29 @@ defmodule Dailyploy.Test.Model.UserTest do
   end
 
   @doc """
+  get_user/1 returns a user struct with the same id as the user requested
+  ## Parameters
+
+  ## Examples
+  iex> UserModel.get_user!(2)
+  %User{}
+  """
+  test "get_user/1 for existing" do
+    {:ok, user} = UserModel.create_user(@user_params)
+    user_received  = UserModel.get_user!(user.id)
+    assert user_received = %User{}
+    assert user.id == user_received.id
+  end
+  @doc """
+  get_user/1 fails for a users that's not in the database
+  """
+  test "get_user/1 for missing id" do
+    assert_raise Ecto.NoResultsError, fn ->
+      user_received  = UserModel.get_user!(9999999)
+    end
+  end
+
+  @doc """
   create_user/1 returns a Struct of the created user
   """
   test "create_user/1" do
