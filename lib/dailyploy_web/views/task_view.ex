@@ -1,6 +1,7 @@
 defmodule DailyployWeb.TaskView do
   use DailyployWeb, :view
   alias DailyployWeb.TaskView
+  alias DailyployWeb.UserView
   alias DailyployWeb.ErrorHelpers
 
   def render("index.json", %{tasks: tasks}) do
@@ -28,7 +29,8 @@ defmodule DailyployWeb.TaskView do
       start_datetime: task.start_datetime,
       end_datetime: task.end_datetime,
       comments: task.comments,
-      user: render(DailyployWeb.UserView, "user.json", user: task.user)
+      members: render_many(task.members, UserView, "user.json"),
+      owner: render_one(task.owner, UserView, "user.json")
     }
   end
 

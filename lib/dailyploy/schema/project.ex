@@ -6,8 +6,8 @@ defmodule Dailyploy.Schema.Project do
 
   alias Dailyploy.Repo
   alias Dailyploy.Schema.User
-  alias Dailyploy.Schema.UserProject
   alias Dailyploy.Schema.Workspace
+  alias Dailyploy.Schema.UserProject
 
   schema "projects" do
     field :name, :string
@@ -15,10 +15,11 @@ defmodule Dailyploy.Schema.Project do
     field :end_date, :date
     field :description, :string
     field :color_code, :string
-    has_many :invitation, Invitation
-    many_to_many :members, User, join_through: UserProject
+
     belongs_to :workspace, Workspace
     belongs_to :owner, User
+    has_many :invitation, Invitation
+    many_to_many :members, User, join_through: UserProject
 
     timestamps()
   end
@@ -26,22 +27,14 @@ defmodule Dailyploy.Schema.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [
-      :name,
-      :start_date,
-      :end_date,
-      :description,
-      :color_code,
-      :owner_id,
-      :workspace_id
-    ])
+    |> cast(attrs, [:name, :start_date, :end_date, :description, :color_code, :owner_id, :workspace_id])
     |> validate_required([:name, :start_date])
-    |> unique_constraint(:project_name_workspace_uniqueness,
-      name: :unique_index_for_project_name_and_workspace_id_in_project
-    )
     |> format_start_date(attrs)
     |> assoc_constraint(:owner)
     |> assoc_constraint(:workspace)
+    |> unique_constraint(:project_name_workspace_uniqueness,
+      name: :unique_index_for_project_name_and_workspace_id_in_project
+    )
     |> put_project_members(attrs["members"])
   end
 
@@ -62,4 +55,5 @@ defmodule Dailyploy.Schema.Project do
 
     put_assoc(changeset, :members, Enum.map(members, &change/1))
   end
+
 end

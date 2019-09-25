@@ -12,21 +12,18 @@ defmodule Dailyploy.Model.Invitation do
     Repo.all(Invitation)
   end
 
-  def already_registered_users_and_workspace(invitee_email, project_id, workspace_id) do
+  def already_registered_users_and_workspace(invitee_email, _project_id, workspace_id) do
     case UserModel.get_by_email(invitee_email) do
-      {:ok, %User{id: user_id}} ->
+      {:ok , %User{id: user_id }} ->
         query =
           from user in UserWorkspace,
-            where:
-              user.workspace_id == ^workspace_id and user.user_id == ^user_id and
-                user.role_id == 2
+          where: user.workspace_id == ^workspace_id and user.user_id == ^user_id and user.role_id == 2
 
         case List.first(Repo.all(query)) do
-          nil -> false
+          nil ->  false
           _ -> true
         end
-
-      {:error, str} ->
+      {:error , _} ->
         false
     end
   end
@@ -34,24 +31,21 @@ defmodule Dailyploy.Model.Invitation do
   def pass_user_details(actual_user_id, project_id, workspace_id) do
     query =
       from project in Project,
-        where: project.id == ^project_id
-
+      where: project.id == ^project_id
     %Project{name: name} = List.first(Repo.all(query))
     invitation_details = %{"project_name" => name}
 
     query =
       from user in User,
-        where: user.id == ^actual_user_id
-
+      where: user.id == ^actual_user_id
     %User{name: name} = List.first(Repo.all(query))
-    invitation_details = Map.put(invitation_details, "user_name", name)
+    invitation_details = Map.put(invitation_details,"user_name",name)
 
     query =
       from workspace in Workspace,
-        where: workspace.id == ^workspace_id
-
+      where: workspace.id == ^workspace_id
     %Workspace{name: name} = List.first(Repo.all(query))
-    invitation_details = Map.put(invitation_details, "workspace_name", name)
+    invitation_details = Map.put(invitation_details,"workspace_name",name)
 
     invitation_details
   end
@@ -59,17 +53,15 @@ defmodule Dailyploy.Model.Invitation do
   def pass_user_details_for_non_existing(project_id, workspace_id) do
     query =
       from project in Project,
-        where: project.id == ^project_id
-
+      where: project.id == ^project_id
     %Project{name: name} = List.first(Repo.all(query))
     invitation_details = %{"project_name" => name}
 
     query =
       from workspace in Workspace,
-        where: workspace.id == ^workspace_id
-
+      where: workspace.id == ^workspace_id
     %Workspace{name: name} = List.first(Repo.all(query))
-    invitation_details = Map.put(invitation_details, "workspace_name", name)
+    invitation_details = Map.put(invitation_details,"workspace_name",name)
 
     invitation_details
   end
