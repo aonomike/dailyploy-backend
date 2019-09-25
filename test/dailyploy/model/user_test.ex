@@ -50,12 +50,12 @@ defmodule Dailyploy.Test.Model.UserTest do
   iex> UserModel.get_user!(2)
   %User{}
   """
-  # test "get_user/1 for existing" do
-  #   {:ok, user} = UserModel.create_user(@user_params)
-  #   user_received  = UserModel.get_user!(user.id)
-  #   assert user_received = %User{}
-  #   assert user.id == user_received.id
-  # end
+  test "get_user/1 for existing" do
+    {:ok, user} = UserModel.create_user(@user_params)
+    user_received  = UserModel.get_user!(user.id)
+    assert %User{} = user_received
+    assert user.id == user_received.id
+  end
 
   @doc """
   get_user/1 fails for a users that's not in the database
