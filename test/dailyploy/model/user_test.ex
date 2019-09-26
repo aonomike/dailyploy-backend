@@ -11,6 +11,7 @@ defmodule Dailyploy.Test.Model.UserTest do
   alias Dailyploy.Schema.Workspace
 
   @workspace_params %{name: "Awesome Workspace", type: 0}
+  @workspace_params_2 %{name: "Awesome Workspace 2", type: 1}
   @user_params %{
     name: "Awesome User",
     email: "awesome@email.com",
@@ -24,12 +25,12 @@ defmodule Dailyploy.Test.Model.UserTest do
     email: "dailyploy@email.com",
     password: "password",
     password_confirmation: "password",
-    workspaces: [@workspace_params]
+    workspaces: [@workspace_params_2]
   }
 
   @update_params %{
-    name: "Dailyploy",
-    email: "dailyploy@email.com"
+    name: "Updated Awesome User",
+    email: "updated.user@email.com"
   }
   @doc """
   list_users/0 returns a list of all  users in the database
@@ -40,6 +41,20 @@ defmodule Dailyploy.Test.Model.UserTest do
   test "list_users/0" do
     {:ok, user} = UserModel.create_user(@user_params)
     assert length(UserModel.list_users()) == 1
+    {:ok, second_user} = UserModel.create_user(@user_params_2)
+    assert length(UserModel.list_users()) == 2
+  end
+
+  @doc """
+  list_users/1 takes workspace_id as paramter and filters users belonging to that workspace
+  """
+  test "list_users/1" do
+    {:ok, user = %User{workspaces: workspaces}} = UserModel.create_user(@user_params)
+    {:ok, user_2 = %User{workspaces: workspaces2}} = UserModel.create_user(@user_params_2)
+    workspace_id = List.first(workspaces).id
+    workspace2_id = List.first(workspaces2).id
+    assert length(UserModel.list_users(workspace_id)) == 1
+    assert length(UserModel.list_users(workspace2_id)) == 1
   end
 
   @doc """
@@ -71,8 +86,8 @@ defmodule Dailyploy.Test.Model.UserTest do
   """
   test "create_user/1" do
     assert {:ok, user = %User{}} = UserModel.create_user(@user_params)
-    assert user.name == "Awesome User"
-    assert user.email == "awesome@email.com"
+    assert user.name == @user_params.name
+    assert user.email == @user_params.email
     assert [%Workspace{} = workspace] = user.workspaces
     assert workspace.name == "Awesome Workspace"
   end
@@ -83,8 +98,8 @@ defmodule Dailyploy.Test.Model.UserTest do
   test "update_user/2" do
     {:ok, user = %User{}} = UserModel.create_user(@user_params)
     assert {:ok, updated_user = %User{}} = UserModel.update_user(user, @update_params)
-    assert updated_user.name == "Dailyploy"
-    assert updated_user.email == "dailyploy@email.com"
+    assert updated_user.name == @update_params.name
+    assert updated_user.email == @update_params.email
   end
 
   @doc """
@@ -94,18 +109,6 @@ defmodule Dailyploy.Test.Model.UserTest do
     {:ok, user = %User{}} = UserModel.create_user(@user_params)
     UserModel.delete_user(user)
     assert length(UserModel.list_users()) == 0
-  end
-
-  @doc """
-  list_users/1 takes workspace_id as paramter and filters users belonging to that workspace
-  """
-  test "list_users/1" do
-    {:ok, user = %User{workspaces: workspaces}} = UserModel.create_user(@user_params)
-    {:ok, user_2 = %User{workspaces: workspaces2}} = UserModel.create_user(@user_params_2)
-    workspace_id = List.first(workspaces).id
-    workspace2_id = List.first(workspaces2).id
-    assert length(UserModel.list_users(workspace_id)) == 1
-    assert length(UserModel.list_users(workspace2_id)) == 1
   end
 
   @doc """
